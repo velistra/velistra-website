@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velistra Research Portal</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: "Baskerville Old Face", "Baskerville", serif; background-color: #ffffff; color: #003366; scroll-behavior: smooth; overflow-x: hidden; }
+        :root { --blue: #003366; --light-blue: #f0f7ff; --white: #ffffff; --gold: #c5a059; }
+
+        /* NAV */
+        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: flex-end; z-index: 1000; box-sizing: border-box; }
+        .reg-btn { background: var(--blue); color: white; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .reg-btn:hover { transform: scale(1.05); background: #004d99; }
+
+        /* HERO */
+        .hero { height: 100vh; background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('munbackground.png'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .logo { width: 180px; margin-bottom: 20px; animation: fadeIn 1.5s; }
+        .hero h1 { font-size: 4rem; margin: 0; animation: slideUp 1s; }
+        .hero p { font-size: 1.8rem; margin: 10px 0; animation: slideUp 1.3s; }
+
+        /* COMMITTEE BOXES */
+        .committee-section { padding: 100px 10%; }
+        .com-box { background: var(--light-blue); border-left: 10px solid var(--blue); padding: 40px; margin-bottom: 40px; cursor: pointer; border-radius: 0 15px 15px 0; transition: all 0.5s ease-out; opacity: 0; transform: translateY(50px); }
+        .com-box.show { opacity: 1; transform: translateY(0); }
+        .com-box:hover { background: #e1efff; transform: translateX(10px); }
+        .com-name { font-size: 2.2rem; font-weight: bold; margin-bottom: 10px; }
+        .com-agenda { font-size: 1.3rem; line-height: 1.5; color: #444; }
+
+        /* OVERLAY SYSTEM */
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; display: none; overflow-y: auto; padding: 60px 10%; box-sizing: border-box; }
+        .close-btn { position: fixed; top: 20px; right: 40px; font-size: 3rem; cursor: pointer; color: var(--blue); z-index: 2100; }
+        
+        /* SEARCH & LIST */
+        .search-container { text-align: center; margin-bottom: 30px; }
+        #countrySearch { width: 100%; max-width: 500px; padding: 15px; border: 2px solid var(--blue); border-radius: 30px; outline: none; font-size: 1.1rem; }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .portfolio-btn { padding: 15px; border: 1px solid var(--blue); text-align: center; cursor: pointer; transition: 0.2s; font-weight: bold; text-transform: uppercase; color: var(--blue); }
+        .portfolio-btn:hover { background: var(--blue); color: white; }
+
+        /* CONTENT DISPLAY */
+        .content-card { animation: fadeIn 0.5s; padding-bottom: 50px; }
+        .back-btn { cursor: pointer; color: var(--gold); font-weight: bold; margin-bottom: 20px; display: inline-block; font-size: 1.2rem; text-decoration: underline; }
+        .country-title { font-size: 3rem; color: var(--blue); border-bottom: 4px solid var(--blue); display: inline-block; margin-bottom: 30px; text-transform: uppercase; }
+        .content-block { margin-bottom: 25px; }
+        .content-block h3 { color: #0056b3; font-size: 1.5rem; margin-bottom: 10px; border-left: 4px solid var(--blue); padding-left: 10px; }
+        .content-block p { font-size: 1.15rem; line-height: 1.7; color: #333; white-space: pre-line; text-align: justify; }
+
+        /* FOOTER */
+        footer { background: var(--blue); color: white; padding: 60px 10%; text-align: center; }
+        .f-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 30px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            nav { padding: 15px; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav><a href="https://docs.google.com/forms/d/e/1FAIpQLSelEFVp2APeza4-Ua4r3u9bNj_LzmQNl9wfCqkXA_GbgNGLrg/viewform" class="reg-btn" target="_blank">Register</a></nav>
+
+    <section class="hero">
+        <img src="logo.png" alt="Logo" class="logo">
+        <h1>Velistra Global Summit</h1>
+        <p>20-21 June, 2026</p>
+    </section>
+
+    <section class="committee-section">
+        <div class="com-box" onclick="openCommittee('UNEP')">
+            <div class="com-name">UNEP (Beginner Committee)</div>
+            <p class="com-agenda">Discussion on global strategies to combat declining air quality and deteriorating AQI levels.</p>
+        </div>
+        <div class="com-box" onclick="openCommittee('UNHRC')">
+            <div class="com-name">UNHRC</div>
+            <p class="com-agenda">Addressing the intersectional human right challenges faced by LGBTQIA+ individuals in the context of forced displacement and migration.</p>
+        </div>
+        <div class="com-box" onclick="openCommittee('UNCSW')">
+            <div class="com-name">UNCSW</div>
+            <p class="com-agenda">Discussion on the persistence of patriarchal conditioning and its impact on women empowerment in the 21st century.</p>
+        </div>
+    </section>
+
+    <div id="overlay">
+        <span class="close-btn" onclick="hideOverlay()">&times;</span>
+        <div id="overlay-content"></div>
+    </div>
+
+    <footer>
+        <h2>FOR ANY QUERIES CONTACT</h2>
+        <div class="f-grid">
+            <div><strong>Paridhi Grover</strong><br>Founder<br>+91 77380 11009</div>
+            <div><strong>Mitesh Garg</strong><br>Co-Founder<br>+91 9910129141</div>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+
+    <script>
+        // Transition trigger for scroll
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.com-box').forEach(b => {
+                if(b.getBoundingClientRect().top < window.innerHeight - 100) b.classList.add('show');
+            });
+        });
+
+        let currentCommittee = "";
+
+        // SHOW LIST OF COUNTRIES
+        function openCommittee(com) {
+            currentCommittee = com;
+            const container = document.getElementById('overlay-content');
+            
+            // Generate Header and Search
+            container.innerHTML = `
+                <h1 style="text-align:center; font-size:3rem;">${com} Portfolios</h1>
+                <div class="search-container">
+                    <input type="text" id="countrySearch" placeholder="Search country..." onkeyup="filter()">
+                </div>
+                <div class="portfolio-grid" id="grid"></div>
+            `;
+            
+            const grid = document.getElementById('grid');
+            const list = allData[com];
+
+            if(list) {
+                list.forEach((p, index) => {
+                    grid.innerHTML += `<div class="portfolio-btn" onclick="openPortfolio(${index})">${p.country}</div>`;
+                });
+            }
+
+            document.getElementById('overlay').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('overlay').scrollTop = 0;
+        }
+
+        // Search Filter Logic
+        function filter() {
+            let val = document.getElementById('countrySearch').value.toUpperCase();
+            let btns = document.getElementsByClassName('portfolio-btn');
+            for (let btn of btns) {
+                btn.style.display = btn.innerText.toUpperCase().includes(val) ? "" : "none";
+            }
+        }
+
+        // SHOW FULL RESEARCH CONTENT
+        function openPortfolio(idx) {
+            const p = allData[currentCommittee][idx];
+            const container = document.getElementById('overlay-content');
+            
+            container.innerHTML = `
+                <div class="content-card">
+                    <div class="back-btn" onclick="openCommittee('${currentCommittee}')">← Back to ${currentCommittee} List</div><br>
+                    <div class="country-title">${p.country}</div>
+                    <div class="content-block"><h3>1) Historical Stance</h3><p>${p.h1}</p></div>
+                    <div class="content-block"><h3>2) Internal Challenges</h3><p>${p.h2}</p></div>
+                    <div class="content-block"><h3>3) Negotiation Limits</h3><p>${p.h3}</p></div>
+                    <div class="content-block"><h3>4) Allies and Rivals</h3><p>${p.h4}</p></div>
+                    <div class="content-block"><h3>5) Relevant Data Points</h3><p>${p.h5}</p></div>
+                    <div class="content-block"><h3>6) Treaties / Legislations</h3><p>${p.h6}</p></div>
+                </div>`;
+            document.getElementById('overlay').scrollTop = 0;
+        }
+
+        function hideOverlay() {
+            document.getElementById('overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
